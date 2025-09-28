@@ -16,6 +16,6 @@ Fișierul lab02/currency_exchange_rate.py (pentru Python): Variabila API_KEY tre
 
 B. Instalarea Bibliotecii requests
 Rulați următoarea comandă în terminal (din directorul rădăcină). Utilizarea py -m pip rezolvă majoritatea problemelor legate de PATH.
-'''bash
+```bash
 py -m pip install requests
-'''
+```
