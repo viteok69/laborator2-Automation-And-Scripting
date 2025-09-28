@@ -5,7 +5,7 @@
 > \
 > Verificat de Mihail Croitor
 
-1. Instalarea Dependențelor
+## 1. Instalarea Dependențelor
 Scriptul Python se bazează pe biblioteca requests pentru a efectua apeluri HTTP.
 
 A. Sincronizarea Cheii API
