@@ -11,7 +11,6 @@ API_KEY = "lab02cheie"
 LOG_FILE = "error.log"
 DATA_DIR = "data"
 
-# Funcție pentru înregistrarea erorilor în fișierul log
 def log_error(message, error_details=None):
     """Înregistrează mesajul de eroare în fișierul error.log."""
     log_path = os.path.join(os.getcwd(), LOG_FILE)
@@ -32,7 +31,6 @@ def log_error(message, error_details=None):
 def save_data(data, from_currency, to_currency, date_str):
     """Salvează datele primite în format JSON într-un fișier numit după monede și dată."""
     
-    # Creează directorul 'data' dacă nu există
     if not os.path.exists(DATA_DIR):
         os.makedirs(DATA_DIR)
         
@@ -49,39 +47,31 @@ def save_data(data, from_currency, to_currency, date_str):
 def get_exchange_rate(from_currency, to_currency, date_str):
     """Obține rata de schimb de la serviciul API."""
     
-    # Definirea URL-ului și a datelor POST
     url = f"{API_BASE_URL}/"
     headers = {'Content-Type': 'application/x-www-form-urlencoded'}
     
-    # Parametrii pentru cererea GET
     params = {
         'from': from_currency,
         'to': to_currency,
         'date': date_str,
     }
     
-    # Datele pentru cererea POST (cheia API)
     post_data = {'key': API_KEY}
     
     try:
-        # Folosim metoda POST conform documentației API-ului (key este trimis prin POST)
         response = requests.post(url, data=post_data, params=params, headers=headers, timeout=10)
         
-        # Verifică erorile HTTP
         response.raise_for_status()
         
-        # Încearcă să parsezi răspunsul JSON
         try:
             api_response = response.json()
         except requests.JSONDecodeError:
             log_error("Răspunsul API nu este un JSON valid.", response.text)
             
-        # Verifică erorile la nivel de aplicație (error field în JSON)
         if api_response.get('error'):
             error_msg = f"Eroare API pentru {from_currency}/{to_currency} la data {date_str}: {api_response['error']}"
             log_error(error_msg, api_response)
 
-        # Extrage și afișează rata de schimb
         if api_response.get('data') is not None:
             rate = api_response['data']
             print("--------------------------------------------------")
@@ -89,7 +79,6 @@ def get_exchange_rate(from_currency, to_currency, date_str):
             print(f"1 {from_currency} = {rate:.4f} {to_currency}")
             print("--------------------------------------------------")
             
-            # Salvează datele complete
             save_data(api_response, from_currency, to_currency, date_str)
             
         else:
@@ -113,7 +102,6 @@ def main():
     
     args = parser.parse_args()
     
-    # Validare simplă a formatului datei înainte de a face apelul
     try:
         datetime.strptime(args.date, '%Y-%m-%d')
     except ValueError:
@@ -123,3 +111,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
